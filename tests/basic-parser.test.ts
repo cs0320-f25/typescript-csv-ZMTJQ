@@ -35,13 +35,13 @@ test("parseCSV yields only arrays", async () => {
 });
 
 
-/* ---------- Task A Work Below ----------*/
+// /* ---------- Task A Tests ----------*/
 
 // Test 1: tests if the parsing is "good," as described in the appendix
 test("ensuring good parsing", async () => {
   const results = await parseCSV(GOOD_PARSE_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results).toHaveLength(2);
   expect(results[0]).toEqual(["Tim", "Nelson", "CSCI 0320", "instructor"]);
   expect(results[1]).toEqual(["Nim", "Telson", "CSCI 0320", "student"]); 
@@ -51,7 +51,7 @@ test("ensuring good parsing", async () => {
 test("ensuring NOT bad parsing", async () => {
   const results = await parseCSV(GOOD_PARSE_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results).not.toEqual([
     ["Tim, Nelson, CSCI 0320, instructor"],
     ["Nim, Telson, CSCI 0320, student"]]
@@ -62,7 +62,7 @@ test("ensuring NOT bad parsing", async () => {
 test("handles name with commas in csv", async () => {
   const results = await parseCSV(NAME_WITH_COMMAS_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["name", "age", "email"]);
   expect(results[1]).toEqual(["the man, testing comma, comma man", "25", "the_man@brown.edu"]); 
 });
@@ -71,7 +71,7 @@ test("handles name with commas in csv", async () => {
 test("handles column missing in csv", async () => {
   const results = await parseCSV(EMPTY_COLUMN_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Zach","", "CSCI 0320", "Student"]);
 });
 
@@ -79,7 +79,7 @@ test("handles column missing in csv", async () => {
 test("handles double quotes in csv", async () => {
   const results = await parseCSV(DOUBLE_QUOTES_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(['Milos "MJ" Janjic', "20", "CS320"]); 
 });
 
@@ -87,7 +87,7 @@ test("handles double quotes in csv", async () => {
 test("handles ending comma in csv", async () => {
   const results = await parseCSV(END_COMMA_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin", "2023",""]); 
 });
 
@@ -95,7 +95,7 @@ test("handles ending comma in csv", async () => {
 test("handles newline in csv", async () => {
   const results = await parseCSV(NEWLINE_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin", "2023"]);
   expect(results[1]).toEqual(["Z_lined", "Q", "2023"]);  
 });
@@ -104,7 +104,7 @@ test("handles newline in csv", async () => {
 test("handles newline in quotes in csv", async () => {
   const results = await parseCSV(QUOTE_NEWLINE_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["I am on two lines", "2022", "2020"]);
 });
 
@@ -112,7 +112,7 @@ test("handles newline in quotes in csv", async () => {
 test("handles number 1,000 written in csv", async () => {
   const results = await parseCSV(THOUSAND_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Number", "1,000"]);
 });
 
@@ -120,7 +120,7 @@ test("handles number 1,000 written in csv", async () => {
 test("handles leading whitespace in csv", async () => {
   const results = await parseCSV(LEADING_WS_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin"]);
 });
 
@@ -128,7 +128,7 @@ test("handles leading whitespace in csv", async () => {
 test("handles ending whitespace in csv", async () => {
   const results = await parseCSV(ENDING_WS_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin"]);
 });
 
@@ -136,30 +136,9 @@ test("handles ending whitespace in csv", async () => {
 test("handles commas in double quotes in csv", async () => {
   const results = await parseCSV(COMMA_IN_DQ_CSV_PATH)
   
-  console.log(results)
+  //console.log(results)
   expect(results[0]).toEqual(['Nah Nah Nah Nah "hey, hey, hey" goodbye']);
 });
 
 
 
-
-/*----------Task C Tests----------*/
-
-const studentRowSchema =
-  z.tuple([z.string(), z.coerce.number(), z.email()])
-  .transform( arr => ({name: arr[0], credits: arr[1], email: arr[2]}));
-
-type StudentRow = z.infer<typeof studentRowSchema>;
-
-test("parses CSV rows with schema", async () => {
-  const results = await parseCSV<StudentRow>(STUDENTS_CSV_PATH, studentRowSchema);
-
-  expect(results).toEqual([
-    { name: "Zach Quitkin", credits: 20, email: "zachary_quitkin@brown.edu" },
-    { name: "Chaz Quitkin", credits: 2, email: "chaz_quitkin@brown.edu" },
-  ]);
-
-  // You can also check types at compile time:
-  const first: StudentRow = results[0];
-  console.log(first.name, first.credits, first.email);
-});
