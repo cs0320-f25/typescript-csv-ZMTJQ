@@ -106,3 +106,21 @@ test("parses CSV rows with schema", async () => {
     expect(results).toBeInstanceOf(z.ZodError);
 });
 
+// Test 8: tests a simple, correct schema organized csv input
+test("parses CSV rows with schema", async () => {
+    const results = await parseCSV(STUDENTS_CSV_PATH, undefined);
+    if (results instanceof z.ZodError) {
+        console.log("This test shouldn't error.") // LLMs suggest throwing here
+    }
+    else {
+        expect(results[0]).toEqual(["Zach Quitkin", "20", "zachary_quitkin@brown.edu"]);
+        expect(results[1]).toEqual(["Chaz Quitkin", "2", "chaz_quitkin@brown.edu"]);    
+
+        // Check types at compile time to further prove undefined 
+        // schema was ignored
+        const first: string[] = results[0];
+        const second: string[] =  results[1];
+        console.log(first[0], first[1], first[2]);
+        console.log(second[0], second[1], second[2]);
+    }
+});
