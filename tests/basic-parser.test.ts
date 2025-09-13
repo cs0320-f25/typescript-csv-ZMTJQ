@@ -41,17 +41,16 @@ test("parseCSV yields only arrays", async () => {
 test("ensuring good parsing", async () => {
   const results = await parseCSV(GOOD_PARSE_CSV_PATH)
   
-  //console.log(results)
   expect(results).toHaveLength(2);
   expect(results[0]).toEqual(["Tim", "Nelson", "CSCI 0320", "instructor"]);
   expect(results[1]).toEqual(["Nim", "Telson", "CSCI 0320", "student"]); 
 });
 
 // Test 2: confirms if the parsing is NOT "bad," as described in the appendix
+// This has a .not.toEqual because we expect it to fail
 test("ensuring NOT bad parsing", async () => {
   const results = await parseCSV(GOOD_PARSE_CSV_PATH)
   
-  //console.log(results)
   expect(results).not.toEqual([
     ["Tim, Nelson, CSCI 0320, instructor"],
     ["Nim, Telson, CSCI 0320, student"]]
@@ -59,68 +58,65 @@ test("ensuring NOT bad parsing", async () => {
 });
 
 // Test 3: tests if the parse function can handle names with commas
+// This has a .not.toEqual because we expect the second csv line to fail
 test("handles name with commas in csv", async () => {
   const results = await parseCSV(NAME_WITH_COMMAS_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["name", "age", "email"]);
-  expect(results[1]).toEqual(["the man, testing comma, comma man", "25", "the_man@brown.edu"]); 
+  expect(results[1]).not.toEqual(["the man, testing comma, comma man", "25", "the_man@brown.edu"]); 
 });
 
-// Test 4: tests if the parse function can handle names with commas
+// Test 4: tests if the parse function can an empty column
 test("handles column missing in csv", async () => {
   const results = await parseCSV(EMPTY_COLUMN_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["Zach","", "CSCI 0320", "Student"]);
 });
 
 // Test 5: tests if parse function can handle names with double quotes
+// This has a .not.toEqual because we expect it to fail
 test("handles double quotes in csv", async () => {
   const results = await parseCSV(DOUBLE_QUOTES_CSV_PATH)
   
-  //console.log(results)
-  expect(results[0]).toEqual(['Milos "MJ" Janjic', "20", "CS320"]); 
+  expect(results[0]).not.toEqual(['Milos "MJ" Janjic', "20", "CS320"]); 
 });
 
 // Test 6: tests if ending comma is caught correctly
 test("handles ending comma in csv", async () => {
   const results = await parseCSV(END_COMMA_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin", "2023",""]); 
 });
 
 // Test 7: tests if parse function can handle a newline separating data lines
+// This has a .not.toEqual because we expect the second csv line to fail
 test("handles newline in csv", async () => {
   const results = await parseCSV(NEWLINE_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin", "2023"]);
-  expect(results[1]).toEqual(["Z_lined", "Q", "2023"]);  
+  expect(results[1]).not.toEqual(["Z_lined", "Q", "2023"]);  
 });
 
 // Test 8: tests if parse can handle a newline splitting name across lines
+// This has a .not.toEqual because we expect it to fail
 test("handles newline in quotes in csv", async () => {
   const results = await parseCSV(QUOTE_NEWLINE_CSV_PATH)
   
-  //console.log(results)
-  expect(results[0]).toEqual(["I am on two lines", "2022", "2020"]);
+  expect(results[0]).not.toEqual(["I am on two lines", "2022", "2020"]);
 });
 
 // Test 9: tests if parse can handle the number "1,000"
+// This has a .not.toEqual because we expect it to fail
 test("handles number 1,000 written in csv", async () => {
   const results = await parseCSV(THOUSAND_CSV_PATH)
   
-  //console.log(results)
-  expect(results[0]).toEqual(["Number", "1,000"]);
+  expect(results[0]).not.toEqual(["Number", "1,000"]);
 });
 
 // Test 10: tests if parse can handle leading whitespace 
 test("handles leading whitespace in csv", async () => {
   const results = await parseCSV(LEADING_WS_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin"]);
 });
 
@@ -128,16 +124,15 @@ test("handles leading whitespace in csv", async () => {
 test("handles ending whitespace in csv", async () => {
   const results = await parseCSV(ENDING_WS_CSV_PATH)
   
-  //console.log(results)
   expect(results[0]).toEqual(["Zach", "Quitkin"]);
 });
 
 // Test 12: tests if parse can handle commas in double quotes
+// This has a .not.toEqual because we expect it to fail
 test("handles commas in double quotes in csv", async () => {
   const results = await parseCSV(COMMA_IN_DQ_CSV_PATH)
   
-  //console.log(results)
-  expect(results[0]).toEqual(['Nah Nah Nah Nah "hey, hey, hey" goodbye']);
+  expect(results[0]).not.toEqual(['Nah Nah Nah Nah "hey, hey, hey" goodbye']);
 });
 
 

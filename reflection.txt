@@ -1,0 +1,46 @@
+Question 1. Correctness
+What makes a CSV parser “correct”? We're not asking for additional input-output pairs here, but fairly precise, natural-language descriptions.
+Put another way, what kinds of general properties should your tests be checking about your CSV parser?
+
+For example, if we were writing a program to control a robot arm in an assembly plant, we might write properties like:
+ - the program never extends the arm beyond 5 feet; 
+ - the arm always returns to its neutral rest position when the system is shut down; or
+ - if sensors detect movement in the assembly area, movement immediately freezes.
+
+Answer: A "correct" CSV parser should parse data from rows only at the specified delimiters. That is, if a delimiter is a comma 
+(which it almost always is), then the parser should parse data only at commas, not at commas in quotes, not at newlines, etc. A "correct" parser
+should also handle any common CSV conventions, such as using double quotes for quotations in data. Lastly, if a parser cannot do these two 
+things due to a poor CSV input, it should somehow notify the user of any errors, as this would be the correct thing to do (or desired action 
+from a user standpoint).
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+Question 2. Random, On-Demand Generation
+Suppose we gave you a function that randomly produced CSV data on demand. You could then call this class from your testing code.
+How might you use this source of random data to expand the power of your testing?
+
+Answer: Well, I would first need to know some guarantees about this function. Does it always produce good CSV data? Or does it also produce 
+error-filled/invalid CSV data? If it were all good data, it could be of some use, but largely just for stress-testing and catching potential
+small bugs like additional whitespace handling. However, if it were bad data, the testing potential would be really powerful. Instead of manually
+testing every edge case I could think of, I could input MILLIONS of these randomly generated CSV files into the  parser to catch significant and
+tiny bugs that I would've missed otherwise. I would just need a single test function that knows what to do with valid CSV and invalid CSV data.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+Question 3. Overall experience, Bugs encountered and resolved
+In what ways did this sprint differ from prior programming assignments you’ve done? Did anything surprise you?
+Did you encounter any bugs during your work on this sprint? If yes, what were they and how did you fix them? 
+If not, how do you think that you managed to avoid them? 
+
+Answer: This sprint had a lot more conceptual and written work than prior assignments I've had. It also used more AI than I'm used to,
+and those AI responses were often actually helpful, which I wasn't expecting. Something that also surprised me was how function overloading works.
+It fixed my T[] vs string[][] issue in testing, and I had never seen something like that before (I either missed it, or it doesn't exist 
+in C (my most practiced coding language)).
+
+The bugs I encountered were trying to access a schema Object (generally T[]) in my testing, but I couldn't because the parser returned a type 
+union of T[] | string[][]. Function overheading helped me fix this issue. I also encountered a bug with ZodErrors. I needed this to catch
+and return errors with Zod Schemas, but it was causing problems in my tests because TypeScript couldn't differentiate between T[] and ZodError. 
+I ended up using instanceOf(ZodError) to get around this issue, because once the value was checked to be an error, the error either was returned
+or the data was safe to be used as a T[]
+
+Otherwise, smooth sailing. I view this as a successful Sprint 1, as I learned a great deal about typescript and testing.
+
